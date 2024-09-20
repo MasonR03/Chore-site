@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Chore Tracker</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    h1 {
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+      text-align: center;
+    }
+    h2, h3 {
+      text-align: center;
+      font-family: 'Comic Sans MS', cursive;
+    }
+    td {
+      font-family: 'Comic Sans MS', cursive;
+    }
+    .date-time-box {
+      border: 2px solid #333;
+      background-color: #cb5902;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.2em;
+      width: 300px;
+      margin: 20px auto; /* Center the box */
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+    /* Styles for the side-by-side layout */
+    .dishwasher-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 20px 0;
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+    .dishwasher-section {
+      flex: 1 1 45%;
+      margin: 10px;
+    }
+    .dishwasher-section table {
+      width: 100%;
+    }
+    @media (max-width: 800px) {
+      .dishwasher-container {
+        flex-direction: column;
+      }
+      .dishwasher-section {
+        flex: 1 1 100%;
+      }
+    }
+    /* CSS Animations */
+    .header img {
+      width: 300px;
+      height: 300px;
+    }
+
+    /* First image spins */
+    .header img:first-child {
+      animation: spin 5s linear infinite;
+    }
+
+    /* Second image bounces up and down */
+    .header img:nth-child(2) {
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-30px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <img src="beav.png" alt="beav" style="float: left;">
+  <img src="beav2.png" alt="beav2" style="float: right; transform: scaleX(-1);">
+</div>
+<h1>Trap House Chore Tracker</h1>
+
+  <!-- Date and Time Box -->
+  <div class="date-time-box">
+    <strong><%= currentDateTime %></strong>
+  </div>
+
+  <!-- Standard Chores Table -->
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align: center;">Chore</th>
+        <th>Assigned To</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% chores.forEach((chore) => { %>
+        <tr class="<%= chore.completed ? 'completed' : '' %>">
+          <td style="text-align: center;"><%= chore.name %></td>
+          <td>
+            <form action="/assign" method="POST">
+              <input type="hidden" name="choreId" value="<%= chore.id %>">
+              <select name="assignedTo" onchange="this.form.submit()">
+                <% roommates.forEach((roommate) => { %>
+                  <option value="<%= roommate %>" <% if (chore.assignedTo === roommate) { %>selected<% } %>><%= roommate %></option>
+                <% }) %>
+              </select>
+            </form>
+          </td>
+          <td><%= chore.completed ? 'Completed' : 'Get it done!' %></td>
+          <td>
+            <form action="/toggle" method="POST">
+              <input type="hidden" name="choreId" value="<%= chore.id %>">
+              <button type="submit">
+                <%= chore.completed ? 'Mark as Pending' : 'Mark as Completed' %>
+              </button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <!-- Dishwasher Chore and Completion History Side by Side -->
+  <h2>Dishwasher Duty</h2>
+  <div class="dishwasher-container">
+    <!-- Dishwasher Chore Table -->
+    <div class="dishwasher-section">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Chore</th>
+            <th>Assigned To</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;"><%= dishwasherChore.name %></td>
+            <td>
+              <form action="/assign-dishwasher" method="POST">
+                <select name="assignedTo" onchange="this.form.submit()">
+                  <% roommates.forEach((roommate) => { %>
+                    <option value="<%= roommate %>" <% if (dishwasherChore.assignedTo === roommate) { %>selected<% } %>><%= roommate %></option>
+                  <% }) %>
+                </select>
+              </form>
+            </td>
+            <td>
+              <form action="/toggle-dishwasher" method="POST">
+                <button type="submit">Mark as Completed</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Dishwasher Completion History -->
+    <div class="dishwasher-section">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align: center;">Completed By</th>
+            <th>Completed At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (dishwasherChore.history.length === 0) { %>
+            <tr>
+              <td colspan="2">No completion history yet.</td>
+            </tr>
+          <% } else { %>
+            <% dishwasherChore.history.forEach((record) => { %>
+              <tr>
+                <td><%= record.completedBy %></td>
+                <td><%= record.completedAt %></td>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

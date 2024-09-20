@@ -1,0 +1,95 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* Dark background */
+    color: #E0E0E0; /* Light text */
+    line-height: 1.6;
+}
+
+h1 {
+    text-align: center;
+    color: #FF6600; /* Oregon State Beavers Orange */
+    margin-top: 10px;
+    font-size: 2.5em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+table {
+    width: 90%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    background-color: #1E1E1E; /* Dark background for table */
+    color: #E0E0E0; /* Light text for table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead th {
+    background-color: #FF6600; /* Oregon State Beavers Orange */
+    color: #FFFFFF; /* White text */
+    padding: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+th, td {
+    padding: 16px;
+    border-bottom: 1px solid #333333; /* Dark border */
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #2A2A2A; /* Slightly lighter row for even rows */
+}
+
+tr:hover {
+    background-color: #333333; /* Highlight row on hover */
+}
+
+tr.completed {
+    background-color: #28a745; /* Green background for completed chores */
+}
+
+a {
+    color: #FF6600; /* Oregon State Beavers Orange for links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #FFA500; /* Lighter orange on hover */
+}
+
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+    }
+
+    th, td {
+        padding: 12px;
+    }
+}
+
+button {
+    background-color: #FF6600; /* Oregon State Beavers Orange */
+    color: #FFFFFF; /* White text */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #333333;
+    background-color: #1E1E1E;
+    color: #E0E0E0;
+    font-size: 1em;
+    margin: 8px 0;
+}
